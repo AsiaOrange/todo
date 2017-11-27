@@ -1,26 +1,27 @@
 import React from 'react';
 
-const TodoList = ({todos,handleList,handleDone }) => {
+const TodoList = ({todos,handleAddList,handleDone }) => {
 
 	const todolists = todos.map((todo) => 
-						<li key={todo.todone.toString()}>
-							<input 
-							  type="checkbox" 
-							  checked={todo.isDone} 
-					  		  onClick={() => handleDone(todo)}
-					  		/>
-							<span>{todo.todone}</span>
-						</li>
+		<li key={todo.todone.toString()}>
+			<input 
+			  type="checkbox" 
+			  checked={todo.isDone} 
+	  		  onChange={() => handleDone(todo)}
+	  		/>
+			<span>{todo.todone}</span>
+		</li>
+	);
 						
-					);
+					
 				
 
 			
 	return(
 		<div>
-			<input  type="text" placeholder="What needs to be done" onClick={handleList}/>
+			<input  type="text" placeholder="What needs to be done" onKeyUp={handleAddList}/>
 			{console.log(todos)}
-			<ul>{todolists}</ul>
+			<ul style={{listStyle:'none'}}>{todolists}</ul>
 			<span>items left</span>
 			<button>All</button>
 			<button>Active</button>
@@ -51,29 +52,52 @@ class TodoContainer extends React.Component {
 //所以先把this.state的值获取到
 
 // 添加任务
-	handleList = (e) => {
-	
-		let sdo = e.target.value;
-		console.log(this.state.todos);
-		let addItem = this.state.todos.push({todone: sdo,isDone:false});
-		this.setState({todos: addItem});
-		e.target.value = ""; 
+	handleAddList = (e) => {
+		if(e.keyCode === 13){
+			let todos = this.state.todos;
+			let sdo = e.target.value;
+			for(let todo of todos){
+				if(sdo === todo.todone || sdo===""){
+					alert("ss");
+					e.target.value="";
+					return null;
+				}
+			}
+			
+			
+				todos = todos.concat([{todone:sdo,isDone:false}]);
+				//use push 报错“map is not a function” try to use concat success
+				console.log({todos});
+				this.setState({todos});
+				console.log({todos});
+				e.target.value = ""; 
+			
+		}
 	}
 
+//toggleDone
 	handleDone = (edited) => {
-		for(let {todone,isDone} of this.state.todos){
-			if(edited.todone === todone){
-				this.setState((prevState) => ({
-					isDone: !prevState.isDone}))
+		let todos = this.state.todos;
+		for(let todo of todos){
+			if(edited.todone === todo.todone){
+				todo.isDone = !todo.isDone;
+				this.setState({todos:todos});
+				break;
 			}
 		}
 		
 	}
 
+
+
 	render(){
 		return(
-			<TodoList todos={this.state.todos} handleList={this.handleList} 
-			   handleDone={this.handleDone}/>
+			<TodoList
+				 todos={this.state.todos}
+				 handleAddList={this.handleAddList} 
+				 handleDone={this.handleDone}
+
+			 />
 		);
 	}
 }
