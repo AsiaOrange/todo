@@ -1,26 +1,30 @@
 import React from 'react';
+import "./TodoList.css";
 
 const TodoList = ({todos,handleAddList,handleDone,handleEditButton,handleMinList,handleEditInput,handleAll,handleActive ,handleCompleted}) => {
 
 	const todolists = todos.map((todo) => 
-		<li key={todo.todone.toString()}>
-			<input 
-			  name="isDone"
-			  id={todo.todone}
-			  type="checkbox" 
-			  checked={todo.isDone} 
-	  		  onChange={() => handleDone(todo)}
-	  		/>
-			{todo.isEdit 
-				? 
-				<input name="isEdit" type="text" value={todo.todone} 
-				  onChange={() => handleEditInput(todo)}/> 
-				: 
-				<label htmlFor={todo.todone}>{todo.todone}</label>
-			}
-			{todo.isEdit ? <button>Save</button> : <button onClick={() => handleEditButton(todo)}>			Edited</button>}
-			{todo.isEdit ? <button>Cancel</button> : <button onClick={() => handleMinList(todo)}>删除</button>}
-
+		<li key={todo.todone.toString()} className="todoItem">
+			<div className="leftTodo">
+				<input 
+				  name="isDone"
+				  id={todo.todone}
+				  type="checkbox" 
+				  checked={todo.isDone} 
+		  		  onChange={() => handleDone(todo)}
+		  		/>
+				{todo.isEdit 
+					? 
+					<input name="isEdit" type="text" value={todo.todone} 
+					  onChange={() => handleEditInput(todo)}/> 
+					: 
+					<label htmlFor={todo.todone}>{todo.todone}</label>
+				}
+			</div>
+			<div className="rightTodo">
+				{todo.isEdit ? <button className="leftButton">Save</button> : <button onClick={() => handleEditButton(todo)} className="leftButton">Edited</button>}
+				{todo.isEdit ? <button className="rightButton">Cancel</button> : <button onClick={() => handleMinList(todo)} className="rightButton">删除</button>}
+			</div>
 		</li>
 	);
 						
@@ -30,14 +34,14 @@ const TodoList = ({todos,handleAddList,handleDone,handleEditButton,handleMinList
 
 			
 	return(
-		<div>
-			<input name="isAdd" type="text" placeholder="What needs to be done" onKeyUp={handleAddList}/>
+		<div className="todoContainer">
+			<input name="isAdd" type="text" placeholder="What needs to be done" onKeyUp={handleAddList} className="new-todo "/>
 			{console.log(todos)}
-			<ul style={{listStyle:'none'}}>{todolists}</ul>
+			<ul style={{listStyle:'none'}} className="todoLists">{todolists}</ul>
 			<span>{doneCount}items left</span>
-			<button onClick={() => handleActive("all")}>All</button>
-			<button onClick={() => handleActive("active")}>Active</button>
-			<button onClick={() => handleActive("comp")}>Completed</button>
+			<button onClick={() => handleActive("all")} className="task-button">All</button>
+			<button onClick={() => handleActive("active")} className="task-button">Active</button>
+			<button onClick={() => handleActive("comp")} className="task-button">Completed</button>
 		</div>
 	);
 }
